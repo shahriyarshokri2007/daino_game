@@ -28,6 +28,22 @@ enemy2Y=300
 clock = pygame.time.Clock()
 FPS = 60
 
+
+font = pygame.font.Font('freesansbold.ttf',34)
+textX=340
+textY=10
+
+over_font = pygame.font.Font("freesansbold.ttf",32)
+
+def show_score(x,y,score):
+    rounded_score = round(score)
+    score = font.render("score :" + str(rounded_score),True,(255,255,255))
+    screen.blit(score, (x,y))
+
+def game_over():
+    over_text = over_font.render("GAME OVER" ,True,(255,255,255))
+    screen.blit(over_text, (300,230))
+
 start=time.time()
 def show_time(seconds):
     minutes = int(seconds // 60)
@@ -43,7 +59,6 @@ def enemy(x,y):
 def enemy2(x,y):
     screen.blit(enemy2_img, (x,y))
 
-
 score = 0
 is_jumping = False
 jump_velocity = 0
@@ -56,10 +71,12 @@ while running:
     all_time=time.time() -start
     screen.fill((30, 30, 30))
     timer_text = font.render(show_time(all_time), True, (0, 255, 0))
-    screen.blit(timer_text, (375, 20))
+    # screen.blit(timer_text, (375, 20))
 
     enemyX -= 6
     enemy2X -= 6
+
+    score += 0.1
 
     for event in pygame.event.get():
         if event.type == pygame.QUIT:
@@ -76,6 +93,8 @@ while running:
             playerY = playerY_ground
             is_jumping = False
             jump_velocity = 0
+    
+
 
     if playerX <= 0:
         playerX = 0
@@ -91,11 +110,20 @@ while running:
         enemy2X = 750
     elif enemy2X >=750:
         enemy2X = 0
+
+
     
     player(playerX,playerY)
     enemy(enemyX,enemyY)
     enemy2(enemy2X,enemy2Y)
-    end=time.time()
+    show_score(textX, textY, score)
+
+    over=True
+
+        
+
+    
+
     pygame.display.update()
 
 pygame.quit()
